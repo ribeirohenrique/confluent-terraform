@@ -1,3 +1,6 @@
-### Notes
+### Notas
+Veja [Sample Project for Confluent Terraform Provider](https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project) que demonstra um passo a passo de como executar este e outros exemplos.
 
-1. See [Sample Project for Confluent Terraform Provider](https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project) that provides step-by-step instructions of running this example.
+- Lembrar que sempre será necessário uma *Cloud API Key* para gerar os recursos do arquivo [main.tf](main.tf)
+
+
