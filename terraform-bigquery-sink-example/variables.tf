@@ -9,3 +9,9 @@ variable "confluent_cloud_api_secret" {
   type        = string
   sensitive   = true
 }
+variable "confluent_environment_id" {
+    description = "Environment Id env-m8jro2"
+    type = string
+    sensitive = false
+  
+}
