@@ -174,43 +174,39 @@ resource "confluent_connector" "sink" {
   config_sensitive = {}
 
   config_nonsensitive = {
-    "connector.class"          = "DatagenSource"
-    "name"                     = "DatagenSourceConnector_0_TEST"
-    "kafka.auth.mode"          = "SERVICE_ACCOUNT"
-    "kafka.service.account.id" = confluent_service_account.bigquery-app-manager-admin.id
-    "kafka.topic"              = confluent_kafka_topic.bigquery-topic.topic_name
-    "output.data.format"       = "JSON"
-    "quickstart"               = "ORDERS"
-    "tasks.max"                = "1"
+    "connector.class"               = "DatagenSource"
+    "name"                          = "DatagenSourceConnector_0_TEST"
+    "kafka.auth.mode"               = "SERVICE_ACCOUNT"
+    "kafka.service.account.id"      = confluent_service_account.bigquery-app-manager-admin.id
+    "kafka.topic"                   = confluent_kafka_topic.bigquery-topic.topic_name
+    "output.data.format"            = "JSON"
+    "quickstart"                    = "ORDERS"
+    "tasks.max"                     = "1"
+    "topics"                        = confluent_kafka_topic.bigquery-sink.topic_name
+    "schema.context.name"           = "default"
+    "input.key.format"              = var.input_key_format
+    "input.data.format"             = var.input_data_format
+    "connector.class"               = "BigQuerySink"
+    "name"                          = var.connector_name,
+    "kafka.auth.mode"               = "SERVICE_ACCOUNT"
+    "kafka.service.account.id"      = confluent_service_account.bigquery-app-manager-sink.id
+    "keyfile"                       = var.gcp_keyfile
+    "project"                       = var.gcp_proj_id
+    "datasets"                      = var.gcp_dataset
+    "partitioning.type"             = "INGESTION_TIME"
+    "auto.create.tables"            = "true"
+    "auto.update.schemas"           = "true"
+    "sanitize.topics"               = "true"
+    "sanitize.topics"               = "true"
+    "sanitize.field.names"          = "false"
+    "time.partitioning.type"        = "DAY"
+    "allow.schema.unionization"     = "false"
+    "all.bq.fields.nullable"        = "false"
+    "convert.double.special.values" = "false"
+    "max.poll.interval.ms"          = "300000"
+    "max.poll.records"              = "500"
+    "tasks.max"                     = "1"
   }
-
-# {
-#   "topics": "topic_0",
-#   "schema.context.name": "default",
-#   "input.key.format": "BYTES",
-#   "input.data.format": "AVRO",
-#   "connector.class": "BigQuerySink",
-#   "name": "BigQuerySinkConnector_0",
-#   "kafka.auth.mode": "SERVICE_ACCOUNT",
-#   "kafka.service.account.id": "sa-ozodzx",
-#   "keyfile": "*\n****************************\n****************************************",
-#   "project": "proj_id",
-#   "datasets": "dataset",
-#   "partitioning.type": "INGESTION_TIME",
-#   "auto.create.tables": "true",
-#   "auto.update.schemas": "true",
-#   "sanitize.topics": "true",
-#   "sanitize.field.names": "false",
-#   "time.partitioning.type": "DAY",
-#   "allow.schema.unionization": "false",
-#   "all.bq.fields.nullable": "false",
-#   "convert.double.special.values": "false",
-#   "max.poll.interval.ms": "300000",
-#   "max.poll.records": "500",
-#   "tasks.max": "1"
-# }
-
-
 }
 
 # resource "confluent_connector" "sink" {
@@ -240,5 +236,5 @@ resource "confluent_connector" "sink" {
 #       "flush.size" : each.value.varFlushSize,
 #       "task.max" : each.value.varMaxTask
 #     }
-  
+
 # }

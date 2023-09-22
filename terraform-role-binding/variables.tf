@@ -16,3 +16,26 @@ variable "confluent_crn" {
   sensitive   = false
 }
 
+variable "confluent_crn_rb" {
+  description = "Confluent CRN Role Binding"
+  type        = string
+  sensitive   = false
+}
+
+variable "environment_id" {
+  description = "Confluent Environment Id"
+  type        = string
+  sensitive   = false
+}
+
+variable "cluster_id" {
+  description = "Confluent Cluster Id"
+  type        = string
+  sensitive   = false
+}
+
+variable "topic_name" {
+  description = "Confluent Topic Name"
+  type        = string
+  sensitive   = false
+}
