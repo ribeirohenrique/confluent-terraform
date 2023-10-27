@@ -10,14 +10,8 @@ variable "confluent_cloud_api_secret" {
   sensitive   = true
 }
 
-variable "confluent_crn" {
-  description = "Confluent CRN"
-  type        = string
-  sensitive   = false
-}
-
-variable "confluent_crn_rb" {
-  description = "Confluent CRN Role Binding"
+variable "organization_id" {
+  description = "Confluent Organization Id"
   type        = string
   sensitive   = false
 }
@@ -36,6 +30,18 @@ variable "cluster_id" {
 
 variable "topic_name" {
   description = "Confluent Topic Name"
+  type        = string
+  sensitive   = false
+}
+
+variable "rest_endpoint" {
+  description = "Confluent REST endpoint"
+  type        = string
+  sensitive   = false
+}
+
+variable "consumer_group_id" {
+  description = "Confluent Consumer Group ID"
   type        = string
   sensitive   = false
 }
