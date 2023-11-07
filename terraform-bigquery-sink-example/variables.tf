@@ -51,7 +51,7 @@ variable "gcp_dataset" {
   sensitive = true
 }
 
-variables "crn_pattern"{
+variable "crn_pattern"{
   description = "Confluent Resource Name"
   type = string
   sensitive = false

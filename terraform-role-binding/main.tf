@@ -12,6 +12,11 @@ provider "confluent" {
   cloud_api_secret = var.confluent_cloud_api_secret
 }
 
+resource "confluent_service_account" "app-creator" {
+  display_name = "app-creator"
+  description  = "Service account to manage 'creations' inside Kafka cluster"
+}
+
 resource "confluent_service_account" "app-sink-rb" {
   display_name = "app-sink-rb"
   description  = "Service account to manage 'sink-connectors' Kafka cluster"
@@ -20,6 +25,12 @@ resource "confluent_service_account" "app-sink-rb" {
 resource "confluent_service_account" "app-source-rb" {
   display_name = "app-source-rb"
   description  = "Service account to manage 'source-connectors' Kafka cluster"
+}
+
+resource "confluent_role_binding" "app-creator" {
+  principal   = "User:${confluent_service_account.app-creator.id}"
+  role_name   = "ResourceOwner"
+  crn_pattern = "crn://confluent.cloud/organization=${var.organization_id}/environment=${var.environment_id}/cloud-cluster=${var.cluster_id}/kafka=${var.cluster_id}"
 }
 
 resource "confluent_role_binding" "app-sink-rb" {
@@ -46,6 +57,30 @@ resource "confluent_role_binding" "connector-source-rb" {
   principal   = "User:${confluent_service_account.app-source-rb.id}"
   role_name   = "DeveloperRead"
   crn_pattern = "${var.organization_id}/connector=${confluent_connector.source.id}"
+}
+
+resource "confluent_api_key" "app-creator" {
+  display_name = "app-creator"
+  description  = "Kafka API Key that is owned by 'app-creator' service account"
+  owner {
+    id          = confluent_service_account.app-creator.id
+    api_version = confluent_service_account.app-creator.api_version
+    kind        = confluent_service_account.app-creator.kind
+  }
+
+  managed_resource {
+    id          = var.cluster_id
+    api_version = "cmk/v2"
+    kind        = "Cluster"
+
+    environment {
+      id = var.environment_id
+    }
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 resource "confluent_api_key" "app-source-api-key" {
@@ -105,8 +140,8 @@ resource "confluent_kafka_topic" "connector-topic" {
   rest_endpoint    = var.rest_endpoint
   partitions_count = 2
   credentials {
-    key    = confluent_api_key.app-source-api-key.id
-    secret = confluent_api_key.app-source-api-key.secret
+    key    = confluent_api_key.app-creator.id
+    secret = confluent_api_key.app-creator.secret
   }
   config = {
     "cleanup.policy"                      = "delete"
@@ -127,6 +162,8 @@ resource "confluent_kafka_topic" "connector-topic" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = []
 }
 
 
@@ -144,7 +181,7 @@ resource "confluent_connector" "source" {
 
   config_nonsensitive = {
     "connector.class"          = "DatagenSource"
-    "name"                     = "DatagenSource-rb"
+    "name"                     = "DatagenSource"
     "kafka.auth.mode"          = "SERVICE_ACCOUNT"
     "kafka.service.account.id" = confluent_service_account.app-source-rb.id
     "kafka.topic"              = confluent_kafka_topic.connector-topic.id
@@ -153,5 +190,5 @@ resource "confluent_connector" "source" {
     "tasks.max"                = "1"
   }
 
-  depends_on = [confluent_service_account.app-source-rb, confluent_kafka_topic.connector-topic]
+  depends_on = [confluent_service_account.app-creator, confluent_kafka_topic.connector-topic]
 }
