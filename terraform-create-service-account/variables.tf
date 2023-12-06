@@ -39,9 +39,3 @@ variable "rest_endpoint" {
   type        = string
   sensitive   = false
 }
-
-variable "consumer_group_id" {
-  description = "Confluent Consumer Group ID"
-  type        = string
-  sensitive   = false
-}

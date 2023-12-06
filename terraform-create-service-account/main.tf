@@ -7,11 +7,14 @@ terraform {
   }
 }
 
+//Define a Cloud API Key criada anteriormente
 provider "confluent" {
   cloud_api_key    = var.confluent_cloud_api_key
   cloud_api_secret = var.confluent_cloud_api_secret
 }
 
+
+//Define o Cluster a ser utilizado
 data "confluent_kafka_cluster" "shared_des" {
   id = var.cluster_id
   environment {
@@ -19,20 +22,21 @@ data "confluent_kafka_cluster" "shared_des" {
   }
 }
 
-// 'app_manager' service account is required in this configuration to create var.topic_name topic and grant ACLs
-// to 'app_producer' and 'app_consumer' service accounts.
+
+//Cria uma Service Account para gerenciar os acessos
 resource "confluent_service_account" "app_manager" {
   display_name = "app_${var.topic_name}_manager"
   description  = "Service account to manage ${var.cluster_id} Kafka cluster"
 }
 
+//Atribui a Service account criada acima a Role de CloudClusterAdmin
 resource "confluent_role_binding" "app_manager_kafka_cluster_admin" {
   principal   = "User:${confluent_service_account.app_manager.id}"
   role_name   = "CloudClusterAdmin"
   crn_pattern = data.confluent_kafka_cluster.shared_des.rbac_crn
 }
 
-
+//Cria uma API Key a nível de Cluster
 resource "confluent_api_key" "app_manager_kafka_api_key" {
   display_name = "app_manager_kafka_api_key"
   description  = "Kafka API Key that is owned by ${confluent_service_account.app_manager.display_name} service account"
@@ -64,11 +68,13 @@ resource "confluent_api_key" "app_manager_kafka_api_key" {
   ]
 }
 
+//Cria uma Service Account para consumir dados
 resource "confluent_service_account" "app_consumer" {
   display_name = "app_${var.topic_name}_consumer"
   description  = "Service account to consume from '${var.topic_name}' topic of ${var.cluster_id} Kafka cluster"
 }
 
+//Cria uma API Key a nível de Cluster
 resource "confluent_api_key" "app_consumer_kafka_api_key" {
   display_name = "${confluent_service_account.app_consumer.display_name}_kafka_api_key"
   description  = "Kafka API Key that is owned by ${confluent_service_account.app_consumer.display_name} service account"
@@ -89,11 +95,13 @@ resource "confluent_api_key" "app_consumer_kafka_api_key" {
   }
 }
 
+//Cria uma Service Account para consumir dados
 resource "confluent_service_account" "app_producer" {
   display_name = "app_${var.topic_name}_producer"
   description  = "Service account to produce to '${var.topic_name}' topic of ${var.cluster_id} Kafka cluster"
 }
 
+//Cria uma API Key a nível de Cluster
 resource "confluent_api_key" "app_producer_kafka_api_key" {
   display_name = "${confluent_service_account.app_producer.display_name}_kafka_api_key"
   description  = "Kafka API Key that is owned by ${confluent_service_account.app_producer.display_name} service account"
@@ -114,6 +122,7 @@ resource "confluent_api_key" "app_producer_kafka_api_key" {
   }
 }
 
+//Cria um tópico para gravar mensagens
 resource "confluent_kafka_topic" "connector_topic" {
   kafka_cluster {
     id = var.cluster_id
@@ -127,20 +136,43 @@ resource "confluent_kafka_topic" "connector_topic" {
   }
 }
 
-
-// Note that in order to consume from a topic, the principal of the consumer ('app_consumer' service account)
-// needs to be authorized to perform 'READ' operation on both Topic and Group resources:
+//Atribui a Service account app_consumer a Role de DeveloperRead
 resource "confluent_role_binding" "app_consumer_developer_read_from_topic" {
   principal   = "User:${confluent_service_account.app_consumer.id}"
   role_name   = "DeveloperRead"
   crn_pattern = "${data.confluent_kafka_cluster.shared_des.rbac_crn}/kafka=${data.confluent_kafka_cluster.shared_des.id}/topic=${confluent_kafka_topic.connector_topic.topic_name}"
 }
 
-resource "confluent_role_binding" "app_consumer_developer_read_from_group" {
-  principal = "User:${confluent_service_account.app_consumer.id}"
-  role_name = "DeveloperRead"
-  // The existing value of crn_pattern's suffix (group=confluent_cli_consumer_*) are set up to match Confluent CLI's default consumer group ID ("confluent_cli_consumer_<uuid>").
-  // https://docs.confluent.io/confluent_cli/current/command_reference/kafka/topic/confluent_kafka_topic_consume.html
-  // Update it to match your target consumer group ID.
-  crn_pattern = "${data.confluent_kafka_cluster.shared_des.rbac_crn}/kafka=${data.confluent_kafka_cluster.shared_des.id}/group=confluent_cli_consumer_*"
+//Atribui a Service account app_producer a Role de DeveloperWrite
+resource "confluent_role_binding" "app_consumer_developer_write_to_topic" {
+  principal   = "User:${confluent_service_account.app_producer.id}"
+  role_name   = "DeveloperWrite"
+  crn_pattern = "${data.confluent_kafka_cluster.shared_des.rbac_crn}/kafka=${data.confluent_kafka_cluster.shared_des.id}/topic=${confluent_kafka_topic.connector_topic.topic_name}"
+}
+
+//Cria o conector DatagenSource utilizando a service account app_producer
+resource "confluent_connector" "source" {
+  environment {
+    id = var.environment_id
+  }
+  kafka_cluster {
+    id = var.cluster_id
+  }
+
+  config_sensitive = {}
+
+  config_nonsensitive = {
+    "connector.class"          = "DatagenSource"
+    "name"                     = "DatagenTerraform"
+    "kafka.auth.mode"          = "SERVICE_ACCOUNT"
+    "kafka.service.account.id" = confluent_service_account.app_producer.id
+    "kafka.topic"              = var.topic_name
+    "output.data.format"       = "JSON"
+    "quickstart"               = "ORDERS"
+    "tasks.max"                = "1"
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
