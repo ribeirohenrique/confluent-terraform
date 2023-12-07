@@ -28,20 +28,14 @@ variable "cluster_id" {
   sensitive   = false
 }
 
-variable "service_account_name" {
-  description = "Service Account Name"
-  type        = string
-  sensitive   = false
-}
-
-variable "role_name" {
-  description = "Role Name"
-  type        = string
-  sensitive   = false
-}
-
 variable "topic_name" {
-  description = "Topic Name"
+  description = "Confluent Topic Name"
+  type        = string
+  sensitive   = false
+}
+
+variable "rest_endpoint" {
+  description = "Confluent REST endpoint"
   type        = string
   sensitive   = false
 }

@@ -164,6 +164,176 @@ resource "confluent_role_binding" "app_consumer_developer_write_to_topic" {
   crn_pattern = "${data.confluent_kafka_cluster.shared_des.rbac_crn}/kafka=${data.confluent_kafka_cluster.shared_des.id}/topic=${confluent_kafka_topic.connector_topic.topic_name}"
 }
 
+//Cria ACLs para o conector
+resource "confluent_kafka_acl" "app_producer_describe_on_cluster" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "CLUSTER"
+  resource_name = "kafka-cluster"
+  pattern_type  = "LITERAL"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "DESCRIBE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_read_on_target_topic" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = confluent_kafka_topic.connector_topic.topic_name
+  pattern_type  = "LITERAL"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "READ"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_create_on_dlq_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "dlq-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "CREATE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_write_on_dlq_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "dlq-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "WRITE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_create_on_success_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "success-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "CREATE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_write_on_success_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "success-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "WRITE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_create_on_error_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "error-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "CREATE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_write_on_error_lcc_topics" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "TOPIC"
+  resource_name = "error-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "WRITE"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+resource "confluent_kafka_acl" "app_producer_read_on_connect_lcc_group" {
+  kafka_cluster {
+    id = data.confluent_kafka_cluster.shared_des.id
+  }
+  resource_type = "GROUP"
+  resource_name = "connect-lcc"
+  pattern_type  = "PREFIXED"
+  principal     = "User:${confluent_service_account.app_producer.id}"
+  host          = "*"
+  operation     = "READ"
+  permission    = "ALLOW"
+  rest_endpoint = data.confluent_kafka_cluster.shared_des.rest_endpoint
+  credentials {
+    key    = confluent_api_key.app_manager_kafka_api_key.id
+    secret = confluent_api_key.app_manager_kafka_api_key.secret
+  }
+}
+
+
+
+
+
+
+
+
 //Cria o conector BigQuery utilizando a service account app_producer
 resource "confluent_connector" "sink" {
   environment {
