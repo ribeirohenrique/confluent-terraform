@@ -327,13 +327,6 @@ resource "confluent_kafka_acl" "app_producer_read_on_connect_lcc_group" {
   }
 }
 
-
-
-
-
-
-
-
 //Cria o conector BigQuery utilizando a service account app_producer
 resource "confluent_connector" "sink" {
   environment {

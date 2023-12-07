@@ -36,8 +36,8 @@ resource "confluent_role_binding" "app_service_account_kafka_cluster_admin" {
   crn_pattern = "${data.confluent_kafka_cluster.confluent_cluster.rbac_crn}/kafka=${data.confluent_kafka_cluster.confluent_cluster.id}"
 }
 
-//Atribui a Service account criada acima a Role de DeveloperWrite ao tópico
-resource "confluent_role_binding" "app_service_account_kafka_cluster_admin" {
+//Atribui a Service account criada acima a Role de DeveloperWrite ou DeveloperRead ao tópico
+resource "confluent_role_binding" "app_service_account_kafka_topic" {
   count = var.role_name == "DeveloperWrite" || var.role_name == "DeveloperRead" ? 1 : 0
   principal   = "User:${confluent_service_account.app_service_account.id}"
   role_name   = var.role_name
@@ -65,6 +65,7 @@ resource "confluent_api_key" "app_service_account_kafka_api_key" {
   }
 
   depends_on = [
-    confluent_role_binding.app_service_account_kafka_cluster_admin
+    confluent_role_binding.app_service_account_kafka_cluster_admin,
+    confluent_role_binding.app_service_account_kafka_topic
   ]
 }
