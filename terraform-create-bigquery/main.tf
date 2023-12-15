@@ -337,7 +337,7 @@ resource "confluent_connector" "sink" {
   }
 
   config_sensitive = {
-    "keyfile"                       = jsonencode(var.gcp_keyfile)
+    "keyfile" = jsonencode(var.gcp_keyfile)
   }
 
   config_nonsensitive = {

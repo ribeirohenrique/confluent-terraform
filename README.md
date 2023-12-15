@@ -17,4 +17,5 @@ confluent_cloud_api_secret = "xxxx"
 organization_id            = "xxxx-xxxx-xxxx-xxxx-xxxx"
 environment_id             = "env-xxxx"
 cluster_id                 = "lkc-xxxx"
+keyfile                    = {}
 ```
