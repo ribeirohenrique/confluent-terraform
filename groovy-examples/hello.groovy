@@ -8,13 +8,13 @@ import java.io.File
 
 
 @groovy.transform.Field
-String confluent_cloud_api_key    = ***REMOVED***
-String confluent_cloud_api_secret = ***REMOVED***
-String organization_id            = ***REMOVED***
-String environment_id             = ***REMOVED***
-String cluster_id                 = ***REMOVED***
+String confluent_cloud_api_key    = "XXXXXXXXXXXXXXXXXXX"
+String confluent_cloud_api_secret = "XXXXXXXXXXXXXXXXXXX"
+String organization_id            = "XXXXXXXXXXXXXXXXXX"
+String environment_id             = "env-XXXXXXX"
+String cluster_id                 = "lkc-XXXXXXX"
 String topic_name                 = "terraform-topic"
-String rest_endpoint              = ***REMOVED***
+String rest_endpoint              = "XXXXXXXXXXXXXXXXXXXXXXXXX"
 String gcp_dataset_name           = "negc_cartoes_123"
 String gcp_project_id             = "confluent-project"
 
