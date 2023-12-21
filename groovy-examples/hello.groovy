@@ -1,5 +1,3 @@
-import groovyx.net.http.RESTClient
-import groovy.json.JsonSlurper
 import java.lang.String
 import groovy.transform.Field
 import java.io.File
@@ -52,7 +50,7 @@ def outputLines = [
     "}}"
 ]
 
-def outputFileName = '/home/developer/terraform-rbac-example/groovy-examples/terra.tfvars'
+def outputFileName = '/home/developer/terraform-rbac-example/groovy-examples/terraform.tfvars'
 new File(outputFileName).withWriter { writer ->
     outputLines.each { line ->
         writer.writeLine line
