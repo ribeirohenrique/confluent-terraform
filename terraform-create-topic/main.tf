@@ -13,7 +13,6 @@ provider "confluent" {
   cloud_api_secret = var.confluent_cloud_api_secret
 }
 
-
 //Define o Cluster a ser utilizado
 data "confluent_kafka_cluster" "confluent_cluster" {
   id = var.cluster_id
