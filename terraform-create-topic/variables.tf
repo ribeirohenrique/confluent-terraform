@@ -22,12 +22,6 @@ variable "service_account_cluster_secret" {
   sensitive   = true
 }
 
-variable "organization_id" {
-  description = "Confluent Organization Id"
-  type        = string
-  sensitive   = false
-}
-
 variable "environment_id" {
   description = "Confluent Environment Id"
   type        = string
