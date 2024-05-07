@@ -34,3 +34,13 @@ keyfile                    = {}
   }
 }
 ```
+
+
+#### Exemplo alternativo de informar o provider externo ao main.tf criando um arquivo providers.tf
+
+```
+provider "confluent" {
+  cloud_api_key = "123"
+  cloud_api_secret = "123"
+}
+```

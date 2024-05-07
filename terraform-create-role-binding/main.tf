@@ -28,6 +28,22 @@ resource "confluent_service_account" "app_service_account" {
   description  = "Service account to interact with ${var.cluster_id} cluster"
 }
 
+//Atribui a Service account criada acima a Role de Operator ao cluster
+resource "confluent_role_binding" "app_service_account_kafka_cluster_admin" {
+  count = var.role_name == "Operator" ? 1 : 0
+  principal   = "User:${confluent_service_account.app_service_account.id}"
+  role_name   = var.role_name
+  crn_pattern = "${data.confluent_kafka_cluster.confluent_cluster.rbac_crn}/kafka=${data.confluent_kafka_cluster.confluent_cluster.id}"
+}
+
+//Atribui a Service account criada acima a Role de DeveloperWrite ou DeveloperRead ao tópico
+resource "confluent_role_binding" "app_service_account_kafka_topic" {
+  count = var.role_name == "DeveloperWrite" || var.role_name == "DeveloperRead" ? 1 : 0
+  principal   = "User:${confluent_service_account.app_service_account.id}"
+  role_name   = var.role_name
+  crn_pattern = "${data.confluent_kafka_cluster.confluent_cluster.rbac_crn}/kafka=${data.confluent_kafka_cluster.confluent_cluster.id}/topic=${var.topic_name}"
+}
+
 //Cria uma API Key a nível de Cluster
 resource "confluent_api_key" "app_service_account_kafka_api_key" {
   display_name = "app_service_account_kafka_api_key"
