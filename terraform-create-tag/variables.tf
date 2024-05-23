@@ -10,26 +10,8 @@ variable "confluent_cloud_api_secret" {
   sensitive   = true
 }
 
-variable "service_account_cluster_key" {
-  description = "Service Account Cluster key"
-  type        = string
-  sensitive   = true
-}
-
-variable "service_account_cluster_secret" {
-  description = "Service Account Cluster secret"
-  type        = string
-  sensitive   = true
-}
-
 variable "environment_id" {
   description = "Confluent Environment Id"
-  type        = string
-  sensitive   = false
-}
-
-variable "schema_registry_id" {
-  description = "Schema Registry Id"
   type        = string
   sensitive   = false
 }
@@ -42,6 +24,12 @@ variable "cluster_id" {
 
 variable "topic_name" {
   description = "Topic Name"
+  type        = string
+  sensitive   = false
+}
+
+variable "schema_registry_id" {
+  description = "Confluent Schema Registry Id"
   type        = string
   sensitive   = false
 }

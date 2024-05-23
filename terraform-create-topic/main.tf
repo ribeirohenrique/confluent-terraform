@@ -2,15 +2,19 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.74.0"
+      version = "1.76.0"
     }
   }
 }
 
 //Define a Cloud API Key criada anteriormente
 provider "confluent" {
-  cloud_api_key    = var.confluent_cloud_api_key
-  cloud_api_secret = var.confluent_cloud_api_secret
+  cloud_api_key                 = var.confluent_cloud_api_key
+  cloud_api_secret              = var.confluent_cloud_api_secret
+  schema_registry_id            = var.schema_registry_id            # optionally use SCHEMA_REGISTRY_ID env var
+  schema_registry_rest_endpoint = var.schema_registry_rest_endpoint # optionally use SCHEMA_REGISTRY_REST_ENDPOINT env var
+  schema_registry_api_key       = var.schema_registry_api_key       # optionally use SCHEMA_REGISTRY_API_KEY env var
+  schema_registry_api_secret    = var.schema_registry_api_secret    # optionally use SCHEMA_REGISTRY_API_SECRET env var
 }
 
 //Define o Cluster a ser utilizado
@@ -34,7 +38,7 @@ resource "confluent_kafka_topic" "confluent_topic" {
     "cleanup.policy"      = "delete"
     "delete.retention.ms" = "3600000"
     ##"max.compaction.lag.ms"               = "9223372036854775807"
-    ##"max.message.bytes"                   = "2097164"
+    "max.message.bytes" = "5000000"
     ##"message.timestamp.difference.max.ms" = "9223372036854775807"
     ##"message.timestamp.type"              = "CreateTime"
     ##"min.compaction.lag.ms"               = "0"
@@ -51,6 +55,16 @@ resource "confluent_kafka_topic" "confluent_topic" {
 
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+resource "confluent_tag_binding" "topic_tagging_des" {
+  tag_name    = "DES"
+  entity_name = "${var.schema_registry_id}:${data.confluent_kafka_cluster.confluent_cluster.id}:${confluent_kafka_topic.confluent_topic.topic_name}"
+  entity_type = "kafka_topic"
+
+  lifecycle {
+    prevent_destroy = false
   }
 }
 
