@@ -46,6 +46,12 @@ variable "topic_name" {
   sensitive   = false
 }
 
+variable "tag_name" {
+  description = "Tag Name"
+  type        = string
+  sensitive   = false
+}
+
 variable "schema_registry_rest_endpoint" {
   description = "Confluent Schema Registry REST Endpoint"
   type        = string

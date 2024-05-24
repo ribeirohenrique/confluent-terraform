@@ -46,8 +46,8 @@ resource "confluent_kafka_cluster" "dedicated" {
   availability = "SINGLE_ZONE"
   cloud        = "GCP"
   region       = "us-central1"
-  dedicated {
-    cku = 1
+  standard {
+
   }
 
   environment {

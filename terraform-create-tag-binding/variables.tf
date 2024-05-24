@@ -33,3 +33,11 @@ variable "schema_registry_api_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "topics" {
+  description = "List of topics to be inserted the TAGS"
+  type = map(object({
+    tag_name    = string
+    entity_type = number
+  }))
+}

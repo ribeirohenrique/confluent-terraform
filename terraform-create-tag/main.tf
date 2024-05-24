@@ -16,10 +16,10 @@ provider "confluent" {
 }
 
 resource "confluent_tag" "tagging" {
-  name        = "UAT"
-  description = "ENVIRONMENT - UAT - TAG"
+  name        = var.tag_name
+  description = "ENVIRONMENT - ${var.tag_name} - TAG"
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }

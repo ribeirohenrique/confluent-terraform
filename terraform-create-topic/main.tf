@@ -30,23 +30,22 @@ resource "confluent_kafka_topic" "confluent_topic" {
   kafka_cluster {
     id = var.cluster_id
   }
-
   topic_name       = var.topic_name
   rest_endpoint    = data.confluent_kafka_cluster.confluent_cluster.rest_endpoint
   partitions_count = 2
   config = {
     "cleanup.policy"      = "delete"
     "delete.retention.ms" = "3600000"
-    ##"max.compaction.lag.ms"               = "9223372036854775807"
-    "max.message.bytes" = "5000000"
+    "max.message.bytes"   = "5000000"
+    "retention.bytes"     = "104857600"
+    "retention.ms"        = "86400000"
+    "segment.bytes"       = "52428800"
+    "segment.ms"          = "86400000"
     ##"message.timestamp.difference.max.ms" = "9223372036854775807"
     ##"message.timestamp.type"              = "CreateTime"
     ##"min.compaction.lag.ms"               = "0"
     ##"min.insync.replicas"                 = "2"
-    "retention.bytes" = "104857600"
-    "retention.ms"    = "86400000"
-    "segment.bytes"   = "52428800"
-    "segment.ms"      = "86400000"
+    ##"max.compaction.lag.ms"               = "9223372036854775807"
   }
   credentials {
     key    = var.service_account_cluster_key
@@ -58,8 +57,8 @@ resource "confluent_kafka_topic" "confluent_topic" {
   }
 }
 
-resource "confluent_tag_binding" "topic_tagging_des" {
-  tag_name    = "DES"
+resource "confluent_tag_binding" "topic_tagging" {
+  tag_name    = var.tag_name
   entity_name = "${var.schema_registry_id}:${data.confluent_kafka_cluster.confluent_cluster.id}:${confluent_kafka_topic.confluent_topic.topic_name}"
   entity_type = "kafka_topic"
 
