@@ -14,15 +14,11 @@ resource "confluent_kafka_topic" "criar" {
   }
   topic_name       = each.value.varTopic
   partitions_count = each.value.varPartitions
-  rest_endpoint    = data.confluent_kafka_cluster.confluent_cluster.rest_endpoint
+  rest_endpoint    = each.value.varRestEndpoint
 
   config = {
     "cleanup.policy"    = each.value.cleanupPolicy
     "retention.ms"      = each.value.retentionTime
     "max.message.bytes" = each.value.maxMessageSize
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 }

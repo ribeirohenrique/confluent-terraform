@@ -2,14 +2,15 @@
 variable "topics" {
   description = "Topic variables for tfvars file"
   type = map(object({
-    kafka_api_key              = string
-    kafka_api_secret           = string
-    varIdCluster               = string
-    varTopic                   = string
-    varPartitions              = string
-    cleanupPolicy              = string
-    retentionTime              = string
-    maxMessageSize             = string
+    kafka_api_key    = string
+    kafka_api_secret = string
+    varIdCluster     = string
+    varTopic         = string
+    varPartitions    = string
+    varRestEndpoint  = string
+    cleanupPolicy    = string
+    retentionTime    = string
+    maxMessageSize   = string
   }))
 }
 variable "confluent_cloud_api_key" {
