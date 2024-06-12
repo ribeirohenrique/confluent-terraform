@@ -24,7 +24,7 @@ data "confluent_kafka_cluster" "confluent_cluster" {
 
 //Define a Service Account a ser utilizado
 data "confluent_service_account" "confluent_service_account" {
-  id = var.service_account_id
+  display_name = var.service_account_name
 }
 
 //Cria uma API Key a nível de Cluster

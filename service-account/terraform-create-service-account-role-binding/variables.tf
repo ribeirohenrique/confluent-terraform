@@ -10,10 +10,16 @@ variable "confluent_cloud_api_secret" {
   sensitive   = true
 }
 
-variable "organization_id" {
-  description = "Confluent Organization Id"
+variable "kafka_api_key" {
+  description = "Cluster API Key"
   type        = string
-  sensitive   = false
+  sensitive   = true
+}
+
+variable "kafka_api_secret" {
+  description = "Cluster API Secret"
+  type        = string
+  sensitive   = true
 }
 
 variable "environment_id" {
@@ -28,7 +34,7 @@ variable "cluster_id" {
   sensitive   = false
 }
 
-variable "service_account_name" {
+variable "service_account_id" {
   description = "Service Account Name"
   type        = string
   sensitive   = false
@@ -42,6 +48,12 @@ variable "role_name" {
 
 variable "topic_name" {
   description = "Topic Name"
+  type        = string
+  sensitive   = false
+}
+
+variable "rest_endpoint" {
+  description = "REST endpoint"
   type        = string
   sensitive   = false
 }
