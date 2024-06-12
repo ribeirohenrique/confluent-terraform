@@ -10,12 +10,6 @@ variable "confluent_cloud_api_secret" {
   sensitive   = true
 }
 
-variable "organization_id" {
-  description = "Confluent Organization Id"
-  type        = string
-  sensitive   = false
-}
-
 variable "environment_id" {
   description = "Confluent Environment Id"
   type        = string
@@ -30,18 +24,6 @@ variable "cluster_id" {
 
 variable "service_account_name" {
   description = "Service Account Name"
-  type        = string
-  sensitive   = false
-}
-
-variable "role_name" {
-  description = "Role Name"
-  type        = string
-  sensitive   = false
-}
-
-variable "topic_name" {
-  description = "Topic Name"
   type        = string
   sensitive   = false
 }
