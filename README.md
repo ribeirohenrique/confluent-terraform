@@ -37,7 +37,7 @@ keyfile                    = {}
 
 #### Exemplo alternativo de terraform.tfvars - v2
 
-
+```
 cloud_api_key       = "123"
 cloud_api_secret    = "123"
 kafka_rest_endpoint = "https://pkc-123.us-central1.gcp.confluent.cloud:443"
@@ -63,7 +63,7 @@ topics = {
     }
   },
 }
-
+```
 
 #### Exemplo alternativo de informar o provider externo ao main.tf criando um arquivo providers.tf
 
