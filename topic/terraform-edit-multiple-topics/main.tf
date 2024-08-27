@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -50,8 +50,7 @@ resource "confluent_kafka_topic" "create_topic" {
   
   for_each         = local.topics_to_create
   topic_name       = each.key
-  partitions_count = each.value.partitions_count
-  config           = each.value.config
+  partitions_count = "2"
 
   lifecycle {
     prevent_destroy = true
@@ -67,7 +66,7 @@ resource "confluent_kafka_topic" "create_topic" {
 resource "confluent_kafka_topic" "modify_topic" {
   for_each         = var.check_modify ? var.get_topics : {}
   topic_name       = each.key
-  partitions_count = each.value.partitions_count
+  partitions_count = "2"
   config           = merge(data.confluent_kafka_topic.get_topics[each.key].config, var.modify_params)
 
   lifecycle {

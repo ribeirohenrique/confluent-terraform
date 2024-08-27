@@ -14,22 +14,18 @@ variable "confluent_cloud_api_secret" {
 variable "gcs_connectors" {
   description = "Topic Variables for tfvars file"
   type = map(object({
-    varClusterApiKey         = optional(string)
-    varClusterApiSecret      = optional(string)
-    confluent_kafka_cluster  = string
     confluent_environment_id = string
+    confluent_kafka_cluster  = string
     varGcsCredentials        = any
-    varNomeConector          = string
-    varAuthMode              = string
-    varTopic                 = string
-    varInputDataFormat       = string
-    varOutputDataFormat      = string
     varGcsBucketName         = string
-    varTimeInterval          = string
-    varFlushSize             = string
-    varMaxTask               = string
+    varInputDataFormat       = string
+    varAuthMode              = string
     varServiceAccountId      = string
-    varBucketFolder          = string
+    varNomeConector          = string
+    varOutputDataFormat      = string
+    varMaxTask               = string
+    varTopicRegexList        = string
+    varGcsTopLevelDirectory  = string
   }))
 
 }

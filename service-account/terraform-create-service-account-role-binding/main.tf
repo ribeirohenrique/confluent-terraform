@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -46,7 +46,5 @@ resource "confluent_role_binding" "app_service_account_kafka_topic" {
   count = var.role_name == "DeveloperWrite" || var.role_name == "DeveloperRead" ? 1 : 0
   principal   = "User:${data.confluent_service_account.app_service_account.id}"
   role_name   = var.role_name
-  crn_pattern = "${data.confluent_kafka_cluster.confluent_cluster.rbac_crn}
-  /kafka=${data.confluent_kafka_cluster.confluent_cluster.id}
-  /topic=${data.confluent_kafka_topic.confluent_topic.topic_name}"
+  crn_pattern = "${data.confluent_kafka_cluster.confluent_cluster.rbac_crn}/kafka=${data.confluent_kafka_cluster.confluent_cluster.id}/topic=${data.confluent_kafka_topic.confluent_topic.topic_name}"
 }

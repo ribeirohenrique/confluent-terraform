@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -47,9 +47,4 @@ resource "confluent_api_key" "app_service_account_kafka_api_key" {
       id = var.environment_id
     }
   }
-
-  depends_on = [
-    confluent_role_binding.app_service_account_kafka_cluster_admin,
-    confluent_role_binding.app_service_account_kafka_topic
-  ]
 }

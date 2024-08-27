@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -33,6 +33,7 @@ resource "confluent_kafka_topic" "confluent_topic" {
   topic_name       = var.topic_name
   rest_endpoint    = data.confluent_kafka_cluster.confluent_cluster.rest_endpoint
   partitions_count = 2
+
   config = {
     "cleanup.policy"      = "delete"
     "delete.retention.ms" = "3600000"

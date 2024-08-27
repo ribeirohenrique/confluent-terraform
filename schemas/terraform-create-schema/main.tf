@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -18,6 +18,8 @@ resource "confluent_schema" "create_Schema" {
   subject_name = "${var.subject_name}-value"
   format = "AVRO"
   schema = file("${var.schema_path}")
+
+
 
   lifecycle {
     prevent_destroy = true

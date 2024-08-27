@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "1.76.0"
+      version = "2.0.0"
     }
   }
 }
@@ -12,27 +12,8 @@ provider "confluent" {
   cloud_api_secret = var.confluent_cloud_api_secret
 }
 
-resource "confluent_environment" "environment" {
+data "confluent_environment" "environment" {
   display_name = var.environment_name
-}
-
-data "confluent_schema_registry_region" "essentials" {
-  cloud   = "GCP"
-  region  = "us-central1"
-  package = "ESSENTIALS"
-}
-
-resource "confluent_schema_registry_cluster" "essentials" {
-  package = data.confluent_schema_registry_region.essentials.package
-
-  environment {
-    id = confluent_environment.environment.id
-  }
-
-  region {
-    # See https://docs.confluent.io/cloud/current/stream-governance/packages.html#stream-governance-regions
-    id = data.confluent_schema_registry_region.essentials.id
-  }
 }
 
 data "confluent_service_account" "terraform_sa" {
@@ -46,16 +27,16 @@ resource "confluent_kafka_cluster" "dedicated" {
   availability = "SINGLE_ZONE"
   cloud        = "GCP"
   region       = "us-central1"
-  standard {
-
+  dedicated {
+    cku = 1
   }
 
   environment {
-    id = confluent_environment.environment.id
+    id = data.confluent_environment.environment.id
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -80,11 +61,12 @@ resource "confluent_api_key" "cluster_api_key" {
     kind        = confluent_kafka_cluster.dedicated.kind
 
     environment {
-      id = confluent_environment.environment.id
+      id = data.confluent_environment.environment.id
     }
   }
   depends_on = [
-    confluent_role_binding.role_cluster_admin
+    confluent_role_binding.role_cluster_admin,
+    confluent_kafka_cluster.dedicated
   ]
 }
 
@@ -94,7 +76,7 @@ resource "confluent_kafka_topic" "topics" {
     id = confluent_kafka_cluster.dedicated.id
   }
   topic_name       = each.value.topic_name
-  rest_endpoint    = confluent_kafka_cluster.dedicated.rest_endpoint
+  rest_endpoint = confluent_kafka_cluster.dedicated.rest_endpoint
   partitions_count = each.value.partition_count
   config = {
     "cleanup.policy"      = each.value.cleanup_policy

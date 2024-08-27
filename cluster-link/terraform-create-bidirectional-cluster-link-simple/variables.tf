@@ -20,18 +20,8 @@ variable "source_kafka_cluster_id" {
   type        = string
 }
 
-variable "source_topic_name" {
-  description = "Name of the Topic on the 'source' Kafka Cluster to create a Mirror Topic for"
-  type        = string
-}
-
 variable "destination_kafka_cluster_id" {
   description = "ID of the 'destination' Kafka Cluster"
-  type        = string
-}
-
-variable "destionation_topic_name" {
-  description = "Name of the Topic on the 'destination' Kafka Cluster to create a Mirror Topic for"
   type        = string
 }
 
