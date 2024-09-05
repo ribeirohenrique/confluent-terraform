@@ -8,19 +8,25 @@ terraform {
 }
 
 provider "confluent" {
-  kafka_id            = var.kafka_id
-  kafka_rest_endpoint = var.kafka_rest_endpoint
-  kafka_api_key       = var.cloud_api_key
-  kafka_api_secret    = var.cloud_api_secret
+  cloud_api_key       = var.cloud_api_key
+  cloud_api_secret    = var.cloud_api_secret
 }
 
-resource "confluent_kafka_topic" "main" {
-  for_each = var.topics
+resource "confluent_kafka_topic" "topics" {
+  kafka_cluster {
+    id = var.cluster_id
+  }
+  credentials {
+    key    = var.cluster_api_key
+    secret = var.cluster_api_secret
+  }
+  rest_endpoint    = var.kafka_rest_endpoint
+  for_each         = var.topics
   topic_name       = each.key
   partitions_count = each.value.partitions_count
   config           = each.value.config
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }

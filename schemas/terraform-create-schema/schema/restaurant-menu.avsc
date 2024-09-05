@@ -1,0 +1,31 @@
+{
+  "type": "record",
+  "namespace": "com.restaurant.menu",
+  "name": "Menu",
+  "doc": "Schema básico para um cardápio de restaurante.",
+  "fields": [
+    {
+      "name": "dish_name",
+      "type": "string",
+      "doc": "Nome do prato."
+    },
+    {
+      "name": "price",
+      "type": "double",
+      "doc": "Preço do prato em formato de ponto flutuante."
+    },
+    {
+      "name": "ingredients",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "doc": "Lista de ingredientes do prato."
+    },
+    {
+      "name": "is_vegetarian",
+      "type": "boolean",
+      "doc": "Indica se o prato é vegetariano."
+    }
+  ]
+}

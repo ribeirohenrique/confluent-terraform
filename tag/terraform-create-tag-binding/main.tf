@@ -16,9 +16,9 @@ provider "confluent" {
 }
 
 resource "confluent_tag_binding" "topic_tagging" {
-  for_each = { for k, v in var.topics : k => v }
+  for_each = var.tags
   tag_name    = each.value.tag_name
-  entity_name = "${var.schema_registry_id}:${var.cluster_id}:${each.value.tag_name}"
+  entity_name = "${var.schema_registry_id}:${var.cluster_id}:${each.key}"
   entity_type = each.value.entity_type
 
   lifecycle {

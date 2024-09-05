@@ -4,12 +4,6 @@ variable "cluster_id" {
   sensitive   = false
 }
 
-variable "topic_name" {
-  description = "Topic Name"
-  type        = string
-  sensitive   = false
-}
-
 variable "schema_registry_id" {
   description = "Confluent Schema Registry Id"
   type        = string
@@ -34,10 +28,11 @@ variable "schema_registry_api_secret" {
   sensitive   = true
 }
 
-variable "topics" {
-  description = "List of topics to be inserted the TAGS"
+variable "tags" {
+  description = "Tag Name"
   type = map(object({
-    tag_name    = string
-    entity_type = number
+    tag_name : string
+    entity_type : string
   }))
+  default = {}
 }

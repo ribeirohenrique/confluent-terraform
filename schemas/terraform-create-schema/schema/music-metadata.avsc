@@ -1,0 +1,38 @@
+{
+  "type": "record",
+  "namespace": "com.music.metadata",
+  "name": "MusicMetadata",
+  "doc": "Schema to store basic metadata of a music track.",
+  "fields": [
+    {
+      "name": "title",
+      "type": "string",
+      "doc": "Title of the music track."
+    },
+    {
+      "name": "artist",
+      "type": "string",
+      "doc": "Name of the artist or band."
+    },
+    {
+      "name": "album",
+      "type": "string",
+      "doc": "Album where the music track appears."
+    },
+    {
+      "name": "release_year",
+      "type": "int",
+      "doc": "Year the track was released."
+    },
+    {
+      "name": "genre",
+      "type": "string",
+      "doc": "Genre of the music track."
+    },
+    {
+      "name": "duration_seconds",
+      "type": "int",
+      "doc": "Duration of the track in seconds."
+    }
+  ]
+}

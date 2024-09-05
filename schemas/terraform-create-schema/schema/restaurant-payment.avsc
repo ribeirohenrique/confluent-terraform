@@ -1,0 +1,42 @@
+{
+  "type": "record",
+  "namespace": "com.restaurant.payments",
+  "name": "PaymentRecord",
+  "doc": "Schema for capturing restaurant payment transactions.",
+  "fields": [
+    {
+      "name": "payment_id",
+      "type": "string",
+      "doc": "Unique identifier for the payment transaction."
+    },
+    {
+      "name": "payment_method",
+      "type": {
+        "type": "enum",
+        "name": "PaymentMethod",
+        "symbols": ["CASH", "CREDIT_CARD", "DEBIT_CARD", "DIGITAL_WALLET"]
+      },
+      "doc": "The method of payment used."
+    },
+    {
+      "name": "amount",
+      "type": "double",
+      "doc": "Total amount of the payment."
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "doc": "Currency in which the payment was made (e.g., USD, EUR)."
+    },
+    {
+      "name": "transaction_date",
+      "type": "string",
+      "doc": "The date and time when the transaction occurred, in ISO 8601 format."
+    },
+    {
+      "name": "customer_id",
+      "type": "string",
+      "doc": "Unique identifier for the customer making the payment."
+    }
+  ]
+}

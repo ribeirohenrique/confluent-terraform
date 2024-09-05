@@ -14,13 +14,10 @@ provider "confluent" {
   schema_registry_api_secret    = var.schema_registry_api_secret    # optionally use SCHEMA_REGISTRY_API_SECRET env var
 }
 
-resource "confluent_schema" "create_Schema" {
+resource "confluent_schema" "create_schema" {
   subject_name = "${var.subject_name}-value"
   format = "AVRO"
-  schema = file("${var.schema_path}")
-
-
-
+  schema = file(".\\schema\\${var.subject_name}.avsc")
   lifecycle {
     prevent_destroy = true
   }

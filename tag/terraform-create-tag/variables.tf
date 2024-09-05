@@ -22,8 +22,10 @@ variable "schema_registry_api_secret" {
   sensitive   = true
 }
 
-variable "tag_name" {
-  description = "Name of the TAG"
-  type        = string
-  sensitive   = false
+variable "tags" {
+  description = "Tag Name"
+  type = map(object({
+    description : string
+  }))
+  default = {}
 }

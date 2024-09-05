@@ -27,9 +27,3 @@ variable "subject_name" {
   type        = string
   sensitive   = false
 }
-
-variable "schema_path" {
-  description = "AVRO Schema path"
-  type        = string
-  sensitive   = false
-}

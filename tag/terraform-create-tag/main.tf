@@ -16,8 +16,9 @@ provider "confluent" {
 }
 
 resource "confluent_tag" "tagging" {
-  name        = var.tag_name
-  description = "ENVIRONMENT - ${var.tag_name} - TAG"
+  for_each    = var.tags
+  name        = each.key
+  description = each.value.description
 
   lifecycle {
     prevent_destroy = true

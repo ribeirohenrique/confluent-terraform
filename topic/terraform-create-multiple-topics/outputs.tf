@@ -1,4 +1,8 @@
-output "kafka_topics" {
-  description = "Map of created Confluent Kafka topics"
-  value       = confluent_kafka_topic.main
+output "topics" {
+  description = "Information about all topics"
+  value = { for k, b in confluent_kafka_topic.topics : k => {
+    topic_name       = b.topic_name
+    partitions_count = b.partitions_count
+  }
+  }
 }

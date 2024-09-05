@@ -9,12 +9,23 @@ variable "cloud_api_secret" {
   sensitive   = true
 }
 
+variable "cluster_api_key" {
+  description = "Confluent cluster API Key"
+  type        = string
+}
+
+variable "cluster_api_secret" {
+  description = "Confluent cluster API Secret"
+  type        = string
+  sensitive   = true
+}
+
 variable "kafka_rest_endpoint" {
   description = "The REST Endpoint of the Kafka cluster"
   type        = string
 }
 
-variable "kafka_id" {
+variable "cluster_id" {
   description = "The ID the the Kafka cluster of the form 'lkc-'"
   type        = string
 }
