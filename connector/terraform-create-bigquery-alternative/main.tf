@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -27,18 +27,26 @@ resource "confluent_connector" "sink" {
   }
 
   config_nonsensitive = {
+    "topics" : each.value.topic_name,
+    "schema.context.name": "default",
+    "input.key.format": "AVRO",
+    "input.data.format": "AVRO",
+    "connector.class" : "BigQueryStorageSink",
     "name" : each.value.connector_name,
-    "connector.class" : "BigQuerySink",
     "kafka.auth.mode" : "SERVICE_ACCOUNT",
     "kafka.service.account.id" = each.value.service_account_id,
-    "topics" : each.value.topic_name,
+    "authentication.method": "Google cloud service account",
     "project" : each.value.gcp_project_id,
     "datasets" : each.value.gcp_dataset,
-    "input.data.format" : each.value.input_data_format,
-    "auto.create.tables" : each.value.auto_create_tables,
+    "ingestion.mode": "BATCH LOADING",
+    "topic2table.map": "bigquery_topic:bigqquery_table",
     "sanitize.topics" : each.value.sanitize_topics,
-    "auto.update.schemas" : each.value.auto_update_schemas,
     "sanitize.field.names" : each.value.sanitize_field_names,
+    "auto.create.tables" : each.value.auto_create_tables,
+    "auto.update.schemas" : each.value.auto_update_schemas,
+    "partitioning.type": "HOUR",
+    "max.poll.interval.ms": "300000",
+    "max.poll.records": "500",
     "tasks.max" : each.value.task_max
   }
 

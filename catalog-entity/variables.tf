@@ -65,3 +65,19 @@ variable "environments" {
   }))
   default = {}
 }
+
+variable "connectors" {
+  description = "A map of Kafka connectors configurations"
+  type = map(object({
+    connector_description : string
+  }))
+  default = {}
+}
+
+variable "cluster_link" {
+  description = "A map of Kafka cluster link configurations"
+  type = map(object({
+    clusterlink_description : string
+  }))
+  default = {}
+}

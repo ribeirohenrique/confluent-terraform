@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "sampleRecorde",
+  "namespace": "com.mycorp.mynamespace",
+  "doc": "Sample schema to help you get started.",
+  "fields": [
+    {
+      "name": "my_field1",
+      "type": "int",
+      "doc": "The int type is a 32-bit signed integer."
+    },
+    {
+      "name": "my_field2",
+      "type": "double",
+      "doc": "mudei aqui pela quinta vez."
+    },
+    {
+      "name": "my_field3",
+      "type": "string",
+      "doc": "mudei aqui pela sexta vez."
+    }
+  ]
+}

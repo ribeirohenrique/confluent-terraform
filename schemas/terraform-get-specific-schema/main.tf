@@ -25,26 +25,32 @@ data "confluent_schema_registry_cluster" "schema_registry_cluster" {
   }
 }
 
-resource "confluent_business_metadata" "business_metadata" {
+/*data "confluent_schemas" "get_schema_details" {
   schema_registry_cluster {
     id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
   }
   rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
+
+  filter {
+    subject_prefix = "restaurant-schema"
+    latest_only    = true
+    deleted        = false
+  }
+
   credentials {
     key    = var.schema_api_key
     secret = var.schema_api_secret
   }
+}*/
 
-  name = "PII"
-  description = "PII metadata"
-  attribute_definition {
-    name = "team"
+data "confluent_subject_mode" "subject_mode" {
+  schema_registry_cluster {
+    id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
   }
-  attribute_definition {
-    name = "email"
-  }
-
-  lifecycle {
-    prevent_destroy = false
+  rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
+  subject_name = "testing-schema-value"
+  credentials {
+    key    = var.schema_api_key
+    secret = var.schema_api_secret
   }
 }

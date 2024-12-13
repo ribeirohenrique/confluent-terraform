@@ -38,3 +38,52 @@ variable "topics" {
   }))
   default = {}
 }
+
+variable "tags" {
+  description = "Tag Name"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}
+
+variable "schema_registry_id" {
+  description = "Confluent Schema Registry Id"
+  type        = string
+  sensitive   = false
+}
+
+variable "schema_registry_rest_endpoint" {
+  description = "Confluent Schema Registry REST Endpoint"
+  type        = string
+  sensitive   = false
+}
+
+variable "schema_registry_api_key" {
+  description = "Confluent Schema Registry API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "schema_registry_api_secret" {
+  description = "Confluent Schema Registry API Secret"
+  type        = string
+  sensitive   = true
+}
+
+variable "topics_info" {
+  description = "A map of Kafka topic configurations"
+  type = map(object({
+    topic_description = string
+    topic_owner = string
+    topic_owner_email = string
+  }))
+  default = {}
+}
+
+variable "environment_id" {
+  description = "Environment Id"
+  type        = string
+  sensitive   = false
+}

@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "NotificarNovoTituloDDACmd",
+  "namespace": "br.com.bv.scob.base.notificar.novo.titulo.dda.cmd",
+  "doc": "Schema do comando para envio das notificações de novo titulo DDA emitidos ao pagador DDA",
+  "fields": [
+    {
+      "name": "CdMensagem",
+      "type": "string",
+      "doc": "Tipo de mensagem DDA. Exemplo: DDA0102R3"
+    },
+    {
+      "name": "NuIdentificacaoTitulo",
+      "type": "long",
+      "doc": "Identificador único do titulo de cobrança."
+    }
+  ]
+}

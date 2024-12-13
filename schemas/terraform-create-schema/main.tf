@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.12.0"
     }
   }
 }
@@ -14,11 +14,22 @@ provider "confluent" {
   schema_registry_api_secret    = var.schema_registry_api_secret    # optionally use SCHEMA_REGISTRY_API_SECRET env var
 }
 
-resource "confluent_schema" "create_schema" {
+
+resource "confluent_subject_config" "subject_config" {
+  subject_name        = "${var.subject_name}-value"
+  compatibility_level = var.compatibility_level
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "confluent_schema" "schema_topic" {
   subject_name = "${var.subject_name}-value"
   format = "AVRO"
   schema = file(".\\schema\\${var.subject_name}.avsc")
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
+  depends_on = [confluent_subject_config.subject_config]
 }

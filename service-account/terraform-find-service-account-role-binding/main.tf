@@ -41,6 +41,10 @@ data "confluent_kafka_topic" "confluent_topic" {
   }
 }
 
+data "confluent_role_binding" "search_role" {
+
+}
+
 //Atribui a Service account criada acima a Role de DeveloperWrite ou DeveloperRead ao tópico
 resource "confluent_role_binding" "app_service_account_kafka_topic" {
   count = var.role_name == "DeveloperWrite" || var.role_name == "DeveloperRead" ? 1 : 0

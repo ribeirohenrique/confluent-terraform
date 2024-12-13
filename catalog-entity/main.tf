@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -25,7 +25,7 @@ data "confluent_schema_registry_cluster" "schema_registry_cluster" {
   }
 }
 
-resource "confluent_catalog_entity_attributes" "environments" {
+/*resource "confluent_catalog_entity_attributes" "environments" {
   for_each = var.environments
   schema_registry_cluster {
     id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
@@ -47,7 +47,52 @@ resource "confluent_catalog_entity_attributes" "environments" {
   }
 }
 
-resource "confluent_catalog_entity_attributes" "kafka-clusters" {
+resource "confluent_catalog_entity_attributes" "connectors" {
+  for_each = var.connectors
+  schema_registry_cluster {
+    id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
+  }
+  rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
+  credentials {
+    key    = var.schema_api_key
+    secret = var.schema_api_secret
+  }
+
+  entity_name = each.key
+  entity_type = "cn_connector"
+  attributes = {
+    "description" = each.value.connector_description
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}*/
+
+resource "confluent_catalog_entity_attributes" "cluster_link" {
+  for_each = var.cluster_link
+  schema_registry_cluster {
+    id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
+  }
+  rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
+  credentials {
+    key    = var.schema_api_key
+    secret = var.schema_api_secret
+  }
+
+  entity_name = "${data.confluent_kafka_cluster.cluster.id}:${each.key}"
+  entity_type = "kafka_cluster_link"
+  attributes = {
+    "description" = each.value.clusterlink_description
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+
+/*resource "confluent_catalog_entity_attributes" "kafka-clusters" {
   for_each = var.clusters
   schema_registry_cluster {
     id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
@@ -112,4 +157,4 @@ resource "confluent_catalog_entity_attributes" "schemas" {
   lifecycle {
     prevent_destroy = false
   }
-}
+}*/

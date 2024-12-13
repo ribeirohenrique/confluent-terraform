@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -198,7 +198,7 @@ resource "confluent_schema" "schemas" {
   rest_endpoint = data.confluent_schema_registry_cluster.schema_registry.rest_endpoint
   subject_name  = "${confluent_kafka_topic.topic.topic_name}-value"
   format        = "AVRO"
-  schema        = file("${var.schema_path}")
+  schema        = file(var.schema_path)
   credentials {
     key    = confluent_api_key.schema_registry_api_key.id
     secret = confluent_api_key.schema_registry_api_key.secret

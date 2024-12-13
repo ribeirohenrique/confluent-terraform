@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -26,6 +26,7 @@ data "confluent_kafka_cluster" "confluent_cluster" {
 data "confluent_service_account" "confluent_service_account" {
   display_name = var.service_account_name
 }
+
 
 //Cria uma API Key a nível de Cluster
 resource "confluent_api_key" "app_service_account_kafka_api_key" {

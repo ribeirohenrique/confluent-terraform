@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -28,7 +28,7 @@ resource "confluent_connector" "source" {
   }
 
   config_nonsensitive = {
-    "behavior.on.error" : "FAIL",
+    "behavior.on.error" : "LOG",
     "connector.class" : "GcsSource",
     "gcs.bucket.name" : each.value.varGcsBucketName,
     "input.data.format" : each.value.varInputDataFormat,

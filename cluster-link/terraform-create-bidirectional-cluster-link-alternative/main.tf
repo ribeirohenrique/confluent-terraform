@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.0.0"
+      version = "2.7.0"
     }
   }
 }
@@ -14,7 +14,7 @@ provider "confluent" {
 }
 
 resource "confluent_cluster_link" "link_clusters" {
-  for_each        = { for k, v in var.cluster_links : k => v }
+  for_each        = var.cluster_links
   link_name       = each.value.varLinkName
   link_mode       = each.value.link_mode
   connection_mode = "OUTBOUND"
@@ -47,7 +47,7 @@ resource "confluent_cluster_link" "link_clusters" {
 }
 
 resource "confluent_kafka_mirror_topic" "mirror_topic" {
-  for_each = { for k, v in var.topics : k => v }
+  for_each = var.topics
   source_kafka_topic {
     topic_name = each.value.topic_name
   }
