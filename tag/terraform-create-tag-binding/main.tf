@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
+      version = "2.12.0"
     }
   }
 }
@@ -16,9 +16,53 @@ provider "confluent" {
 }
 
 resource "confluent_tag_binding" "topic_tagging" {
-  for_each = var.tags
+  for_each    = var.topic_tags
   tag_name    = each.value.tag_name
   entity_name = "${var.schema_registry_id}:${var.cluster_id}:${each.key}"
+  entity_type = each.value.entity_type
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "confluent_tag_binding" "connector_tagging" {
+  for_each    = var.connector_tags
+  tag_name    = each.value.tag_name
+  entity_name = "${var.schema_registry_id}:${each.key}"
+  entity_type = each.value.entity_type
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "confluent_tag_binding" "environment_tagging" {
+  for_each    = var.environment_tags
+  tag_name    = each.value.tag_name
+  entity_name = "${var.schema_registry_id}:${each.key}"
+  entity_type = each.value.entity_type
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "confluent_tag_binding" "schema_tagging" {
+  for_each    = var.schema_tags
+  tag_name    = each.value.tag_name
+  entity_name = "${var.schema_registry_id}:.:${each.key}"
+  entity_type = each.value.entity_type
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "confluent_tag_binding" "cluster_link_tagging" {
+  for_each = var.cluster_link_tags
+  tag_name    = each.value.tag_name
+  entity_name = "${var.schema_registry_id}:${each.key}"
   entity_type = each.value.entity_type
 
   lifecycle {

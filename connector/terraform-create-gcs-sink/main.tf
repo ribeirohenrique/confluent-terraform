@@ -50,7 +50,10 @@ resource "confluent_connector" "sink" {
     "gcs.bucket.name" : each.value.varGcsBucketName,
     "time.interval" : each.value.varTimeInterval,
     "flush.size" : each.value.varFlushSize,
-    "tasks.max" : each.value.varMaxTask
+    "tasks.max" : each.value.varMaxTask,
+    "schema.compatibility": "NONE" ##NONE, BACKWARD, FORWARD and FULL.,
+    "locale": "pt_BR",
+    "max.poll.records": "50"
   }
 }
 

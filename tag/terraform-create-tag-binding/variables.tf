@@ -28,8 +28,44 @@ variable "schema_registry_api_secret" {
   sensitive   = true
 }
 
-variable "tags" {
-  description = "Tag Name"
+variable "topic_tags" {
+  description = "Topic Tag"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}
+
+variable "connector_tags" {
+  description = "Connector Tag"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}
+
+variable "environment_tags" {
+  description = "Environment Tag"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}
+
+variable "cluster_link_tags" {
+  description = "Cluster Link Tags"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}
+
+variable "schema_tags" {
+  description = "Schema Tags"
   type = map(object({
     tag_name : string
     entity_type : string
