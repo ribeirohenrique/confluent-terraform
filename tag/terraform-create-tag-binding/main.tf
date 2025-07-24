@@ -2,7 +2,6 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.12.0"
     }
   }
 }
@@ -61,6 +60,16 @@ resource "confluent_tag_binding" "schema_tagging" {
 
 resource "confluent_tag_binding" "cluster_link_tagging" {
   for_each = var.cluster_link_tags
+  tag_name    = each.value.tag_name
+  entity_name = "${var.schema_registry_id}:${each.key}"
+  entity_type = each.value.entity_type
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+resource "confluent_tag_binding" "cluster_tagging" {
+  for_each = var.cluster_tags
   tag_name    = each.value.tag_name
   entity_name = "${var.schema_registry_id}:${each.key}"
   entity_type = each.value.entity_type

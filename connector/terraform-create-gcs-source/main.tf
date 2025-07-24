@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
+
     }
   }
 }
@@ -32,10 +32,10 @@ resource "confluent_connector" "source" {
     "connector.class" : "GcsSource",
     "gcs.bucket.name" : each.value.varGcsBucketName,
     "input.data.format" : each.value.varInputDataFormat,
+    "output.data.format" : each.value.varOutputDataFormat,
     "kafka.auth.mode" : each.value.varAuthMode,
     "kafka.service.account.id" : each.value.varServiceAccountId,
     "name" : each.value.varNomeConector,
-    "output.data.format" : each.value.varOutputDataFormat,
     "schema.context.name" : "default",
     "tasks.max" : each.value.varMaxTask,
     "topic.regex.list" : each.value.varTopicRegexList,

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
+
     }
   }
 }
@@ -341,29 +341,29 @@ resource "confluent_connector" "sink" {
   }
 
   config_nonsensitive = {
-    "topics"                        = var.topic_name
-    "schema.context.name"           = "default"
-    "input.key.format"              = "BYTES"
-    "input.data.format"             = "AVRO"
-    "connector.class"               = "BigQuerySink"
-    "name"                          = "BigQueryTerraform"
-    "kafka.auth.mode"               = "SERVICE_ACCOUNT"
-    "kafka.service.account.id"      = confluent_service_account.app_producer.id
-    "project"                       = var.gcp_project_id
-    "datasets"                      = var.gcp_dataset_name
-    "partitioning.type"             = "INGESTION_TIME"
-    "auto.create.tables"            = "true"
-    "auto.update.schemas"           = "false"
-    "sanitize.topics"               = "true"
-    "sanitize.field.names"          = "false"
-    "time.partitioning.type"        = "DAY"
-    "allow.schema.unionization"     = "false"
-    "all.bq.fields.nullable"        = "false"
-    "convert.double.special.values" = "false"
-    "max.poll.interval.ms"          = "300000"
-    "max.poll.records"              = "500"
-    "tasks.max"                     = "1"
-    "output.data.format"            = "JSON"
+    //"connector.class"               = "BigQuerySink"
+    //"name"                          = "BigQueryTerraform"
+    //"kafka.service.account.id"      = confluent_service_account.app_producer.id
+    //"topics"                        = var.topic_name
+    //"schema.context.name"           = "default"
+    //"input.key.format"              = "BYTES"
+    //"input.data.format"             = "AVRO"
+    //"kafka.auth.mode"               = "SERVICE_ACCOUNT"
+    //"project"                       = var.gcp_project_id
+    //"datasets"                      = var.gcp_dataset_name
+    //"partitioning.type"             = "INGESTION_TIME"
+    //"auto.create.tables"            = "true"
+    //"auto.update.schemas"           = "false"
+    //"sanitize.topics"               = "true"
+    //"sanitize.field.names"          = "false"
+    //"time.partitioning.type"        = "DAY"
+    //"allow.schema.unionization"     = "false"
+    //"all.bq.fields.nullable"        = "false"
+    //"convert.double.special.values" = "false"
+    //"max.poll.interval.ms"          = "300000"
+    //"max.poll.records"              = "500"
+    //"tasks.max"                     = "1"
+    //"output.data.format"            = "JSON"
     "quickstart"                    = "ORDERS"
     "tasks.max"                     = "1"
   }

@@ -1,19 +1,10 @@
-output "id" {
-  value = data.confluent_subject_mode.subject_mode.id
-}
-
-output "mode" {
-  value = data.confluent_subject_mode.subject_mode.mode
-}
-
-output "schema_registry_cluster" {
-  value = data.confluent_subject_mode.subject_mode.schema_registry_cluster
-}
-
-output "rest_endpoint" {
-  value = data.confluent_subject_mode.subject_mode.rest_endpoint
-}
-
-output "subject_name" {
-  value = data.confluent_subject_mode.subject_mode.subject_name
+output "schemas" {
+  value = [
+    for schema in data.confluent_schemas.all_schemas.schemas : {
+      schema_identifier = schema.schema_identifier
+      schema_reference  = schema.schema_reference
+      subject_name      = schema.subject_name
+      version           = schema.version
+    }
+  ]
 }

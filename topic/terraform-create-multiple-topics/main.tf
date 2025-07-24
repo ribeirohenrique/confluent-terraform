@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     confluent = {
-      source  = "confluentinc/confluent"
-      version = "2.7.0"
+      source = "confluentinc/confluent"
+
     }
   }
 }
@@ -26,6 +26,25 @@ data "confluent_kafka_cluster" "cluster" {
 data "confluent_schema_registry_cluster" "schema_registry_cluster" {
   environment {
     id = var.environment_id
+  }
+}
+
+resource "confluent_kafka_topic" "coffee-topics" {
+  kafka_cluster {
+    id = var.cluster_id
+  }
+  credentials {
+    key    = var.cluster_api_key
+    secret = var.cluster_api_secret
+  }
+  rest_endpoint    = var.kafka_rest_endpoint
+  for_each         = local.coffee_varieties
+  topic_name       = each.key
+  partitions_count = local.default_topic_config.partitions_count
+  config           = local.default_topic_config.config
+
+  lifecycle {
+    prevent_destroy = false
   }
 }
 
@@ -57,6 +76,7 @@ resource "confluent_tag_binding" "topic_tagging" {
   lifecycle {
     prevent_destroy = false
   }
+  depends_on = [confluent_kafka_topic.topics]
 }
 
 resource "confluent_catalog_entity_attributes" "topics" {
@@ -81,4 +101,5 @@ resource "confluent_catalog_entity_attributes" "topics" {
   lifecycle {
     prevent_destroy = false
   }
+  depends_on = [confluent_kafka_topic.topics, confluent_tag_binding.topic_tagging]
 }

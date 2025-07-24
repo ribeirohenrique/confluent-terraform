@@ -2,7 +2,6 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
     }
   }
 }
@@ -18,11 +17,12 @@ data "confluent_schemas" "getAll" {
   }
   rest_endpoint = var.schema_registry_rest_endpoint
 
-  filter {
-    subject_prefix = var.subject_name
-    latest_only    = false
-    deleted        = true
-  }
+  # filter {
+  #   subject_prefix = var.subject_name
+  #   latest_only    = true
+  #   deleted        = true
+  #
+  # }
 
   credentials {
     key    = var.schema_registry_api_key

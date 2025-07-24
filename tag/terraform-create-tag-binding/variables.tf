@@ -72,3 +72,11 @@ variable "schema_tags" {
   }))
   default = {}
 }
+variable "cluster_tags" {
+  description = "Cluster Tags"
+  type = map(object({
+    tag_name : string
+    entity_type : string
+  }))
+  default = {}
+}

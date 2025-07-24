@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
+
     }
   }
 }
@@ -239,6 +239,14 @@ resource "confluent_kafka_acl" "service_account_acl_source_describe" {
 resource "confluent_cluster_link" "destination_to_source" {
   link_name = var.cluster_link_name
   link_mode = "BIDIRECTIONAL"
+
+  config = {
+    "acl.sync.enable" : "false",
+    "acl.sync.ms" : "5000",
+    "auto.create.mirror.topics.enable" : "true",
+    "topic.config.sync.ms" : "5000"
+    "consumer.offset.sync.enable" : "false"
+  }
   local_kafka_cluster {
     id            = data.confluent_kafka_cluster.destination.id
     rest_endpoint = data.confluent_kafka_cluster.destination.rest_endpoint

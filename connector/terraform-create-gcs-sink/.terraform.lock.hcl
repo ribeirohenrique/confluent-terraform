@@ -2,8 +2,8 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/confluentinc/confluent" {
-  version     = "2.7.0"
-  constraints = "2.7.0"
+  version     = "2.16.0"
+  constraints = "2.16.0"
   hashes = [
     "h1:zN0IA1H0/WjIEV137oc17ytEE2tyNb7YBj0OYGdLjcY=",
     "zh:0381d2e10d9a6aacea827321d1fdeda19774262f821d50b15fe907f1b893f5a4",

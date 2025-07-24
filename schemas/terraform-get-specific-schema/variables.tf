@@ -8,6 +8,11 @@ variable "confluent_cloud_api_secret" {
   type        = string
   sensitive   = true
 }
+variable "schema_base_64" {
+  description = "Schema Registry API Key BASE 64"
+  type        = string
+  sensitive = false
+}
 
 variable "schema_api_key" {
   description = "Schema Registry API Key"
@@ -30,4 +35,13 @@ variable "environment_id" {
   description = "Environment Id"
   type        = string
   sensitive   = false
+}
+
+variable "schemas_to_delete" {
+  description = "List of schemas to delete"
+  type = list(object({
+    subject_name = string
+    version      = number
+  }))
+  default = []
 }

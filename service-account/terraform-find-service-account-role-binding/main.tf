@@ -2,7 +2,7 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
+
     }
   }
 }
@@ -39,10 +39,6 @@ data "confluent_kafka_topic" "confluent_topic" {
     secret = var.kafka_api_secret
 
   }
-}
-
-data "confluent_role_binding" "search_role" {
-
 }
 
 //Atribui a Service account criada acima a Role de DeveloperWrite ou DeveloperRead ao tópico

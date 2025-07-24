@@ -2,7 +2,6 @@ terraform {
   required_providers {
     confluent = {
       source  = "confluentinc/confluent"
-      version = "2.7.0"
     }
   }
 }
@@ -25,32 +24,36 @@ data "confluent_schema_registry_cluster" "schema_registry_cluster" {
   }
 }
 
-/*data "confluent_schemas" "get_schema_details" {
+data "confluent_schemas" "all_schemas" {
   schema_registry_cluster {
     id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
   }
   rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
 
   filter {
-    subject_prefix = "restaurant-schema"
-    latest_only    = true
-    deleted        = false
+    subject_prefix = ""    # Deixe vazio para pegar todos os schemas
+    latest_only    = false # Para trazer todas as versões de cada schema
+    deleted        = false  # Exclua schemas deletados
   }
 
-  credentials {
-    key    = var.schema_api_key
-    secret = var.schema_api_secret
-  }
-}*/
-
-data "confluent_subject_mode" "subject_mode" {
-  schema_registry_cluster {
-    id = data.confluent_schema_registry_cluster.schema_registry_cluster.id
-  }
-  rest_endpoint = data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint
-  subject_name = "testing-schema-value"
   credentials {
     key    = var.schema_api_key
     secret = var.schema_api_secret
   }
 }
+
+resource "null_resource" "delete_schema_version" {
+  for_each = { for idx, schema in var.schemas_to_delete : "${schema.subject_name}:${schema.version}" => schema }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      ./delete_schema.sh \
+        "${data.confluent_schema_registry_cluster.schema_registry_cluster.rest_endpoint}" \
+        "${var.schema_api_key}" \
+        "${var.schema_api_secret}" \
+        "${each.value.subject_name}" \
+        "${each.value.version}"
+    EOT
+  }
+}
+

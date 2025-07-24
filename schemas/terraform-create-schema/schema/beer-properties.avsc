@@ -1,0 +1,73 @@
+{
+  "type": "record",
+  "name": "Beer",
+  "namespace": "com.example.brewery",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "doc": "Identificador único da cerveja"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Nome da cerveja"
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "enum",
+        "name": "BeerType",
+        "symbols": [
+          "LAGER",
+          "ALE",
+          "STOUT",
+          "IPA",
+          "PORTER",
+          "PILSNER",
+          "WHEAT",
+          "SOUR"
+        ]
+      },
+      "doc": "Tipo da cerveja"
+    },
+    {
+      "name": "abv",
+      "type": "float",
+      "doc": "Teor alcoólico em percentual (Alcohol By Volume)"
+    },
+    {
+      "name": "brewery",
+      "type": "string",
+      "doc": "Nome da cervejaria"
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "doc": "País de origem"
+    },
+    {
+      "name": "description",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Descrição da cerveja"
+    },
+    {
+      "name": "availability",
+      "type": {
+        "type": "enum",
+        "name": "Availability",
+        "symbols": ["YEAR_ROUND", "SEASONAL", "LIMITED"]
+      },
+      "doc": "Disponibilidade da cerveja"
+    },
+    {
+      "name": "ingredients",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "doc": "Lista de ingredientes principais"
+    }
+  ]
+}
